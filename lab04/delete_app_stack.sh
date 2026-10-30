@@ -41,7 +41,9 @@ aws ec2 authorize-security-group-ingress --group-id "$APP_SECURITY_GROUP_ID" \
 echo "== Deleting the ALB security group =="
 aws ec2 delete-security-group --group-id "$ALB_SECURITY_GROUP_ID" --region "$AWS_REGION" 2>/dev/null || true
 
-rm -f stack_outputs.env uploader-lt-data.json viewer-lt-data.json user-data-uploader.sh user-data-viewer.sh uploader-policy.json viewer-policy.json trust-policy.json
+# Remove generated state only. Policy and user-data files are source inputs
+# required by the next create_app_stack.sh run and must be preserved.
+rm -f stack_outputs.env uploader-lt-data.json viewer-lt-data.json
 
 echo "== Removing IAM instance profiles and roles =="
 aws iam remove-role-from-instance-profile --instance-profile-name "$UPLOADER_PROFILE_NAME" \

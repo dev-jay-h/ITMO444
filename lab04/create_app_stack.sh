@@ -1,6 +1,29 @@
 #!/usr/bin/env bash
 set -e
 
+# Always run relative to this script, even when invoked from another directory.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# These files are source inputs, but older versions of delete_app_stack.sh
+# removed them. Restore them automatically from lab03 when necessary.
+for REQUIRED_FILE in \
+  trust-policy.json \
+  uploader-policy.json \
+  viewer-policy.json \
+  user-data-uploader.sh \
+  user-data-viewer.sh; do
+  if [ ! -f "$REQUIRED_FILE" ]; then
+    if [ -f "../lab03/$REQUIRED_FILE" ]; then
+      echo "Restoring missing $REQUIRED_FILE from ../lab03/"
+      cp "../lab03/$REQUIRED_FILE" "$REQUIRED_FILE"
+    else
+      echo "Error: required file $REQUIRED_FILE was not found."
+      exit 1
+    fi
+  fi
+done
+
 if [ -f .env ]; then
   export $(grep -v '^#' .env | xargs)
 else
@@ -29,27 +52,27 @@ echo "== Setting up IAM Roles & Profiles =="
 
 if ! aws iam get-role --role-name "$UPLOADER_ROLE_NAME" 2>/dev/null; then
   aws iam create-role --role-name "$UPLOADER_ROLE_NAME" --assume-role-policy-document file://trust-policy.json
-  aws iam put-role-policy --role-name "$UPLOADER_ROLE_NAME" --policy-name "${UPLOADER_ROLE_NAME}-policy" --policy-document file://uploader-policy.json
 fi
+aws iam put-role-policy --role-name "$UPLOADER_ROLE_NAME" --policy-name "${UPLOADER_ROLE_NAME}-policy" --policy-document file://uploader-policy.json
 
 if ! aws iam get-instance-profile --instance-profile-name "$UPLOADER_PROFILE_NAME" 2>/dev/null; then
   aws iam create-instance-profile --instance-profile-name "$UPLOADER_PROFILE_NAME"
-  aws iam add-role-to-instance-profile --instance-profile-name "$UPLOADER_PROFILE_NAME" --role-name "$UPLOADER_ROLE_NAME"
-  echo "Waiting 10s for IAM profile propagation..."
-  sleep 10
 fi
+aws iam add-role-to-instance-profile --instance-profile-name "$UPLOADER_PROFILE_NAME" --role-name "$UPLOADER_ROLE_NAME" 2>/dev/null || true
+echo "Waiting 10s for uploader IAM profile propagation..."
+sleep 10
 
 if ! aws iam get-role --role-name "$VIEWER_ROLE_NAME" 2>/dev/null; then
   aws iam create-role --role-name "$VIEWER_ROLE_NAME" --assume-role-policy-document file://trust-policy.json
-  aws iam put-role-policy --role-name "$VIEWER_ROLE_NAME" --policy-name "${VIEWER_ROLE_NAME}-policy" --policy-document file://viewer-policy.json
 fi
+aws iam put-role-policy --role-name "$VIEWER_ROLE_NAME" --policy-name "${VIEWER_ROLE_NAME}-policy" --policy-document file://viewer-policy.json
 
 if ! aws iam get-instance-profile --instance-profile-name "$VIEWER_PROFILE_NAME" 2>/dev/null; then
   aws iam create-instance-profile --instance-profile-name "$VIEWER_PROFILE_NAME"
-  aws iam add-role-to-instance-profile --instance-profile-name "$VIEWER_PROFILE_NAME" --role-name "$VIEWER_ROLE_NAME"
-  echo "Waiting 10s for IAM profile propagation..."
-  sleep 10
 fi
+aws iam add-role-to-instance-profile --instance-profile-name "$VIEWER_PROFILE_NAME" --role-name "$VIEWER_ROLE_NAME" 2>/dev/null || true
+echo "Waiting 10s for viewer IAM profile propagation..."
+sleep 10
 
 echo "== Creating / Updating Launch Templates =="
 
@@ -110,6 +133,13 @@ else
   echo "ALB security group already exists, skipping."
 fi
 
+# Reconcile listener ingress on every run. A previously created security group
+# may still exist after partial cleanup but may no longer contain these rules.
+aws ec2 authorize-security-group-ingress --group-id "$ALB_SECURITY_GROUP_ID" \
+  --protocol tcp --port "$UPLOADER_LISTENER_PORT" --cidr 0.0.0.0/0 --region "$AWS_REGION" >/dev/null 2>&1 || true
+aws ec2 authorize-security-group-ingress --group-id "$ALB_SECURITY_GROUP_ID" \
+  --protocol tcp --port "$VIEWER_LISTENER_PORT" --cidr 0.0.0.0/0 --region "$AWS_REGION" >/dev/null 2>&1 || true
+
 echo "== Tightening the app security group to only accept traffic from the ALB =="
 aws ec2 revoke-security-group-ingress --group-id "$APP_SECURITY_GROUP_ID" \
   --protocol tcp --port 3000 --cidr 0.0.0.0/0 --region "$AWS_REGION" 2>&1 || true
@@ -118,7 +148,7 @@ aws ec2 authorize-security-group-ingress --group-id "$APP_SECURITY_GROUP_ID" \
 
 echo "== Target groups =="
 UPLOADER_TG_ARN=$(aws elbv2 describe-target-groups --names "$UPLOADER_TG_NAME" --region "$AWS_REGION" \
-  --query "TargetGroups[0].TargetGroupArn" --output text 2>/dev/null)
+  --query "TargetGroups[0].TargetGroupArn" --output text 2>/dev/null || true)
 if [ "$UPLOADER_TG_ARN" = "None" ] || [ -z "$UPLOADER_TG_ARN" ]; then
   UPLOADER_TG_ARN=$(aws elbv2 create-target-group \
     --name "$UPLOADER_TG_NAME" \
@@ -138,7 +168,7 @@ else
 fi
 
 VIEWER_TG_ARN=$(aws elbv2 describe-target-groups --names "$VIEWER_TG_NAME" --region "$AWS_REGION" \
-  --query "TargetGroups[0].TargetGroupArn" --output text 2>/dev/null)
+  --query "TargetGroups[0].TargetGroupArn" --output text 2>/dev/null || true)
 if [ "$VIEWER_TG_ARN" = "None" ] || [ -z "$VIEWER_TG_ARN" ]; then
   VIEWER_TG_ARN=$(aws elbv2 create-target-group \
     --name "$VIEWER_TG_NAME" \
@@ -159,7 +189,7 @@ fi
 
 echo "== Application Load Balancer =="
 ALB_ARN=$(aws elbv2 describe-load-balancers --names "$ALB_NAME" --region "$AWS_REGION" \
-  --query "LoadBalancers[0].LoadBalancerArn" --output text 2>/dev/null)
+  --query "LoadBalancers[0].LoadBalancerArn" --output text 2>/dev/null || true)
 if [ "$ALB_ARN" = "None" ] || [ -z "$ALB_ARN" ]; then
   ALB_ARN=$(aws elbv2 create-load-balancer \
     --name "$ALB_NAME" \
@@ -177,7 +207,7 @@ fi
 
 echo "== Listeners =="
 EXISTING_PORTS=$(aws elbv2 describe-listeners --load-balancer-arn "$ALB_ARN" --region "$AWS_REGION" \
-  --query "Listeners[].Port" --output text 2>/dev/null)
+  --query "Listeners[].Port" --output text 2>/dev/null || true)
 
 if echo "$EXISTING_PORTS" | tr '\t' '\n' | grep -qx "$UPLOADER_LISTENER_PORT"; then
   echo "Listener on port $UPLOADER_LISTENER_PORT already exists, skipping."
@@ -205,7 +235,7 @@ ALB_DNS_NAME=$(aws elbv2 describe-load-balancers --load-balancer-arns "$ALB_ARN"
 echo "== Auto Scaling Groups =="
 EXISTING_UPLOADER_ASG=$(aws autoscaling describe-auto-scaling-groups \
   --auto-scaling-group-names "$UPLOADER_ASG_NAME" --region "$AWS_REGION" \
-  --query "AutoScalingGroups[0].AutoScalingGroupName" --output text 2>/dev/null)
+  --query "AutoScalingGroups[0].AutoScalingGroupName" --output text 2>/dev/null || true)
 if [ "$EXISTING_UPLOADER_ASG" = "None" ] || [ -z "$EXISTING_UPLOADER_ASG" ]; then
   aws autoscaling create-auto-scaling-group \
     --auto-scaling-group-name "$UPLOADER_ASG_NAME" \
@@ -223,7 +253,7 @@ fi
 
 EXISTING_VIEWER_ASG=$(aws autoscaling describe-auto-scaling-groups \
   --auto-scaling-group-names "$VIEWER_ASG_NAME" --region "$AWS_REGION" \
-  --query "AutoScalingGroups[0].AutoScalingGroupName" --output text 2>/dev/null)
+  --query "AutoScalingGroups[0].AutoScalingGroupName" --output text 2>/dev/null || true)
 if [ "$EXISTING_VIEWER_ASG" = "None" ] || [ -z "$EXISTING_VIEWER_ASG" ]; then
   aws autoscaling create-auto-scaling-group \
     --auto-scaling-group-name "$VIEWER_ASG_NAME" \

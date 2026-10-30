@@ -1,0 +1,13 @@
+== 1. Default VPC and subnets in both AZs ==
+== 2. Database security group (port 5432, from the app security group only) ==
+Database security group already exists, skipping.
+== 3. DB subnet group ==
+DB subnet group already exists, skipping.
+== 4. Database password (random, stored as a SecureString, never printed) ==
+Password parameter already exists, keeping it.
+== 5. The PostgreSQL instance (free tier size, no backups) ==
+Database itmo-444-544-weather-db already exists, skipping.
+Waiting for the database to become available (usually 5 to 10 minutes)...
+Done. Database endpoint: itmo-444-544-weather-db.c1q6k4ewksjb.us-east-2.rds.amazonaws.com
+Automated backups are OFF (retention 0) and no final snapshot will be taken on delete.
+Next: ./create_weather_stack.sh. When testing is finished: ./delete_weather_stack.sh then ./delete_database.sh
