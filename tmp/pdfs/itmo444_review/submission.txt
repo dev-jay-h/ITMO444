@@ -1,0 +1,367 @@
+
+===== PAGE 1 =====
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          ITMO-444                                                                  
+                                                                                    
+                                                                                    
+                                                                                    
+          Weather    Advisor   TwoTier   APIs                                       
+                                                                                    
+          Jay Han                                                                   
+          jhan38@hawk.illinoistech.edu                                              
+                                                                                    
+                                                                                    
+          Checklist                                                                 
+                                                                                    
+          Output of terraform version and aws sts get-caller-identity               
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          Part A: the plan before the first apply, the second apply showing no changes, the in-place
+          update plan (-) and the replacement plan (-/+), with a sentence on why -/+ is the one to be
+          careful about.                                                            
+          => +/- means Terraform will destroy the existing resource and create a replacement, so it can
+          cause downtime, data loss, or a changed resource ID, unlike ~, which updates the resource in
+          place.                                                                    
+                                                                                    
+                                                                                    
+          Output of terraform fmt, terraform validate and the last lines of terraform plan showing
+          the number of resources to add.                                           
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          Output of app_smoke_test.py with all nine checks passing, and a screenshot of the
+          advisor page.                                                             
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+===== PAGE 2 =====
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          Steps 1 to 3: your effort table with line counts, the terraform graph output with your
+                                                                                    
+          sentence, and the No changes plan with your sentence comparing it to running the bash
+          script twice.                                                             
+                                                                                    
+          Effort table with line counts:                                            
+            -  Bash scripts: 618                                                    
+            -  Terraform: 394                                                       
+            -  Terraform template: 33                                               
+            -  Terraform total: 427                                                 
+                                                                                    
+                                                                                    
+          Terraform graph:                                                          
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+===== PAGE 3 =====
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          The Terraform graph shows the dependencies between the load balancer, target groups, launch
+          templates, IAM roles, DynamoDB table, SSM parameter, and Auto Scaling groups. Terraform
+          uses these dependencies to create independent resources in parallel and dependent resources
+          in the correct order.                                                     
+                                                                                    
+          No changes plan:                                                          
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          Running terraform plan after applying the configuration showed No changes, demonstrating that
+          Terraform is idempotent. Running the Bash script twice may attempt to create the same
+          resources again, fail because names already exist, or require explicit checks such as
+                                                                                    
+          ensure_target_group, while Terraform recognizes resources already recorded in its state and
+          performs no unnecessary work.                                             
+                                                                                    
+          Step 4 and 5: the plan for cache_seconds = 60, the instance refresh status and new
+          CACHE_SECOND=60 line, and the drift plans with your sentence about        
+          ensure_target_group.                                                      
+          Instance refreshes and response (successful and 100)                      
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          Changes and check the cache_seconds = 60                                  
+                                                                                    
+                                                                                    
+          Drift plans and my sentence                                               
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+===== PAGE 4 =====
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          The Bash ensure_target_group function checks whether a target group exists, but it does not
+          fully detect or correct configuration drift when an existing target group is changed manually.
+          Terraform compares the real AWS resource with the declared configuration and proposes a plan
+          to restore the expected settings.                                         
+                                                                                    
+          Step 6 and 7: the IAM simulator results with your sentence about the advisor tier, and the
+          No changes plan, the grep -c count of 0 and your sentences about ignore_changes.
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          The advisor tier follows least privilege: it can read only the Gemini API key from its designated
+          SSM parameter and cannot access the DynamoDB weather table.               
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          The ignore_changes = [value] lifecycle rule tells Terraform not to overwrite an SSM parameter
+          value that was changed outside Terraform, so the plan reports No changes. The grep count of 0
+          shows that the actual Gemini API key was not found as plain text in the Terraform state file.
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+===== PAGE 5 =====
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          Steps 8 and 9: the fallback answers with the gemini_error journal line and your sentence
+          about silent fallback, and the completed Lambda table with your answer to question 4.
+                                                                                    
+          Set the wrong key and error message:                                      
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          The advisor silently falls back to rule-based clothing advice when Gemini fails, so the user still
+          receives a successful response. However, this can hide an API-key, quota, or model failure
+                                                                                    
+          unless the gemini_error journal log is monitored.                         
+                                                                                    
+          Question 4:                                                               
+          Lambda would be a good fit because both tiers perform short, stateless request-response work
+          and already keep persistent data outside the application instances. It would remove the need to
+          manage EC2 instances, launch templates, and Auto Scaling groups, although API Gateway,
+          cold starts, execution limits, and external API latency would become new considerations.
+                                                                                    
+          Short answers: how Terraform is like AWS Lambda and where the comparison stops,
+                                                                                    
+          what Terraform did not make easier, and your answers to the Section 13.1 review
+          questions.                                                                
+                                                                                    
+          Terraform is like AWS Lambda because both are declarative in the sense that I specify the
+          desired result and let the service handle much of the underlying execution. The comparison
+          stops because Lambda runs application code in response to events, while Terraform provisions
+          and manages infrastructure by comparing configuration, state, and real resources.
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+===== PAGE 6 =====
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          Terraform did not make application debugging, external API failures, secret acquisition, or
+          understanding AWS networking and IAM easier. I still had to diagnose the Node.js services,
+          Gemini and weather API behavior, security groups, permissions, instance startup, and
+          application logs myself.                                                  
+                                                                                    
+          Step 10: the terraform destroy plan and total time, your cost estimate (hours multiplied
+          by the hourly cost), and the verification commands showing nothing remains.
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          Terraform successfully destroyed all 25 managed resources. The destroy operation took 6
+          minutes and 37.88 seconds.                                                
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+          The two t3.micro instances ran for approximately 1.82 hours. At $0.0104 per instance-hour, the
+          estimated EC2 cost was 2 × 1.82 × $0.0104 = approximately $0.0379, excluding the additional
+          ALB, storage, DynamoDB, and data-processing charges.                      
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
+                                                                                    
