@@ -1,0 +1,67 @@
+JINSUNG (JAY) HAN
+Chicago, IL | (312) 555-0100 | jay.han@example.edu | linkedin.com/in/jay-hhh | github.com/jinscodes
+
+EDUCATION
+Illinois Institute of Technology, Chicago, IL
+B.S. in Information Technology and Management, expected May 2027. GPA: 3.9/4.0
+
+Stony Brook University (SUNY Korea), Incheon, South Korea
+Undergraduate Studies in Technology Systems Management, 2020-2022
+
+HONORS AND AWARDS
+- Honor Marshal, Illinois Institute of Technology, 2026
+- Dean's List, Illinois Institute of Technology, 2025-2026
+- Merit-Based Scholar, Stony Brook University, 2022
+- Dean's List, Stony Brook University, 2020-2022
+
+RESEARCH EXPERIENCE
+Illinois Institute of Technology, Chicago, IL
+Undergraduate Researcher, May 2026-Present
+- Lead an extension of DoseBench for evaluating trustworthy LLM decision-making under temporal uncertainty, incomplete context, and rule-based constraints.
+- Design scalable data pipelines, gold-annotation guidelines, and evaluation rubrics for decision correctness, ambiguity handling, reasoning verifiability, and failure-mode analysis.
+- Implement an evaluation framework using repeated sampling, majority-vote accuracy, consistency, token-level confidence, entropy, and decision margins across four instruction-tuned LLMs.
+- Analyze reliability failures where models produce consistent and highly confident but incorrect or unsupported decisions.
+- Use Jetstream2 for multi-core parallel processing of large-scale Reddit datasets and shared research storage.
+- Co-author a manuscript on LLM decision-making under temporal uncertainty that is currently under peer review.
+
+Chung-Ang University and Union Contents, Seoul, South Korea
+Researcher, August 2023-September 2024
+- Developed a software-based approach for tracking unauthorized application distribution by embedding encrypted identifiers in official application metadata.
+- Built Python web crawlers for evidence collection and a React and TypeScript dashboard for centralized inspection and analysis.
+- Prepared weekly technical research reports and collaborated with academic and industry stakeholders.
+
+PROFESSIONAL EXPERIENCE
+Union Contents, Seoul, South Korea
+Researcher and Front-End Developer, August 2022-September 2024
+- Led the front-end redesign and redevelopment of AUTOGREEN within a two-person front-end team, delivering a faster and more maintainable production application.
+- Implemented authentication, administrative dashboards, search, CRUD operations, API integration, filtering, and interactive data visualization for AUTOGREEN and MOVIEBOARD.
+- Improved loading performance and reduced redundant server requests through page-specific rendering, reusable components, React Context API, and Zustand.
+- Conducted data collection, technical feasibility analysis, and early-stage product design for MYSO.
+- Collaborated with front-end and back-end engineers to turn product and research requirements into deployable web applications.
+
+SELECTED TECHNICAL PROJECTS
+Practo: AI-Powered Healthcare Appointment Platform, Fall 2025
+- Refactored and expanded the front end of an AI-powered doctor appointment platform, improving maintainability and interface consistency.
+- Implemented missing pages and completed unfinished user flows as part of a team that advanced to Round 2 of the Grainger Computing Innovation Prize.
+
+BREEDGE: Ethical Dog Adoption and Breeder Education Platform, 2024-Present
+- Conduct customer-discovery interviews and field research on trust, accessibility, and post-adoption support in Korea's dog-adoption ecosystem.
+- Develop a platform concept with verified breeder profiles, breed education, adopter compatibility matching, and post-adoption support.
+- Selected for the 2026 Student Startup Team 300+ after document and presentation evaluations.
+
+Digital Map Project, Fall 2021
+- Collaborated with the Incheon municipal government to plan a digital map of Myanmar-operated businesses and community resources.
+- Contributed to dataset construction, map development, and presentation preparation.
+
+LEADERSHIP AND COMMUNITY ENGAGEMENT
+Technology Systems Management Senator, Stony Brook University (SUNY Korea), Fall 2020-Spring 2021
+- Represented students, planned student-government events, and led the design, production, and distribution of department apparel.
+
+STEAM Mentor, Stony Brook University (SUNY Korea), Fall 2021-Spring 2022
+- Taught elementary school students programming concepts and computational logic through block-based coding activities.
+
+TECHNICAL SKILLS
+Programming: Python, JavaScript, TypeScript, Java, Dart, SQL
+Frameworks and Tools: React, Next.js, Flutter, Git, Ansible, Prometheus, Grafana
+Research Methods: Large-scale data processing, web crawling, rule-based filtering, LLM-assisted annotation, quality auditing
+Computing: Jetstream2, Linux, Docker

@@ -1,0 +1,21 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadGeneratedResumes",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::itmo-444-544-jhan38-fileshare/resumes/*"
+    },
+    {
+      "Sid": "UseResumeMailerTopic",
+      "Effect": "Allow",
+      "Action": [
+        "sns:ListSubscriptionsByTopic",
+        "sns:Subscribe",
+        "sns:Publish"
+      ],
+      "Resource": "arn:aws:sns:us-east-2:541195182299:resume-mailer-jhan38"
+    }
+  ]
+}

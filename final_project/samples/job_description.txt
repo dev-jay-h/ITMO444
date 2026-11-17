@@ -1,0 +1,28 @@
+AI and LLM Research Software Engineer Intern
+
+We are seeking an undergraduate research software engineer intern to help build reliable evaluation systems for large language models and data-intensive AI applications. The intern will work with researchers and engineers to design reproducible experiments, process large datasets, analyze model behavior, and communicate findings through clear technical documentation.
+
+What you will do
+- Build Python data pipelines for large-scale data processing, web data collection, filtering, annotation, and quality auditing
+- Design and implement evaluation frameworks for large language models, including repeated sampling, consistency analysis, confidence analysis, and failure-mode evaluation
+- Develop reproducible experiments for AI systems operating under incomplete context, ambiguity, temporal uncertainty, and rule-based constraints
+- Use Linux, Docker, and shared research computing environments to run parallel data-processing and model-evaluation workflows
+- Analyze experimental results and identify cases where language models produce confident but incorrect or unsupported decisions
+- Build internal research dashboards and data-inspection interfaces using JavaScript, TypeScript, React, or Next.js
+- Collaborate with researchers and software engineers to translate research requirements into maintainable tools
+- Prepare technical reports, experiment documentation, and research presentations
+
+What we are looking for
+- Currently pursuing a bachelor's degree in Information Technology, Computer Science, Data Science, or a related field
+- Experience programming in Python and working with structured datasets
+- Familiarity with large language models, AI evaluation, prompt design, annotation workflows, or model reliability research
+- Experience with large-scale data processing, web crawling, rule-based filtering, or quality auditing
+- Working knowledge of Linux, Git, Docker, and collaborative software development practices
+- Ability to analyze experimental results and explain technical findings clearly
+- Strong attention to correctness, reproducibility, privacy, and responsible AI practices
+
+Preferred qualifications
+- Experience with React, TypeScript, Next.js, SQL, or interactive data visualization
+- Experience using shared or cloud research computing resources for parallel workloads
+- Familiarity with confidence metrics, entropy, majority voting, consistency measurement, or error analysis
+- Prior academic research, technical writing, or cross-functional product development experience

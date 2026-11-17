@@ -1,0 +1,3 @@
+stack_outputs.env
+node_modules/
+*.log

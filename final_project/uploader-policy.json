@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "WriteGeneratedResumes",
+      "Effect": "Allow",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::itmo-444-544-jhan38-fileshare/resumes/*"
+    },
+    {
+      "Sid": "ReadOnlyGeminiKey",
+      "Effect": "Allow",
+      "Action": "ssm:GetParameter",
+      "Resource": "arn:aws:ssm:us-east-2:541195182299:parameter/itmo-444/gemini-api-key"
+    }
+  ]
+}
