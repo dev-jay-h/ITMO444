@@ -1,2 +1,5 @@
 *.pem
 .env
+/tmp
+.chart-data-*/
+.codex-build/
